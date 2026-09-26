@@ -1,0 +1,9 @@
+{
+  "kicker": "自然语言处理课程 · 作业一 · TEXT CLASSIFICATION",
+  "hero": "文本分类实现\n实验报告",
+  "summary": "在 NYT 新闻三分类任务上，系统比较词袋模型、Word2Vec / GloVe 词向量与 BERT 预训练语言模型三类文本表示方法，统一在相同的 80/10/10 数据划分上，以 Accuracy 与 Macro-F1 两项指标进行评价与分析。",
+  "meta": "姓名：吴嘉豪 · 学号：2113454 · 2026 年 9 月",
+  "footer": "NLP HOMEWORK 1 · TEXT CLASSIFICATION",
+  "year": "2026",
+  "word": "REPORT"
+}

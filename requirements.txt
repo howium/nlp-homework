@@ -1,0 +1,16 @@
+accelerate==1.15.0
+datasets==5.0.1
+gensim==4.4.0
+matplotlib==3.11.2
+nltk==3.10.3
+numpy==2.5.3
+pandas==3.0.6
+scikit-learn==1.9.1
+scipy==1.18.1
+tabulate==0.10.0
+transformers==5.17.0
+
+# torch: install separately with the index matching your CUDA driver, e.g.
+#   pip install torch --index-url https://download.pytorch.org/whl/cu126
+# A CPU-only build also runs Task 1/2 fine; only Task 3 (BERT) really needs
+# a GPU to finish in reasonable time. Tested with torch 2.14.0+cu126.
