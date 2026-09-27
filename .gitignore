@@ -37,3 +37,6 @@ __pycache__/
 # report build tooling (local only, not part of the homework code)
 hw1/src/generate_report_pdf.py
 hw1/src/merge_report.py
+
+# markdown companion kept locally only (the PDF is the deliverable)
+hw1/report/hw1_report.md

@@ -32,6 +32,7 @@ python src/task2_word2vec.py   # Task 2b/2c: Word2Vec(AG) / Word2Vec(NYT) + LR
 python src/task2_glove.py      # Task 2a: GloVe 6B 100d + LR
 python src/task3_bert.py --lr 3e-5   # Task 3: BERT fine-tuning（学习率可选）
 python src/aggregate_results.py      # 汇总 results/results.csv
+python src/make_chart.py             # 重新生成报告中的对比图（可选）
 ```
 
 ## 外部资源（一次性，均不提交）
