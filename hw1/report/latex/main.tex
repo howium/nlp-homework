@@ -58,7 +58,7 @@ frame=trbl
 }
 %------------超链接----------
 \usepackage[colorlinks,linkcolor=black,anchorcolor=blue]{hyperref}
-\hypersetup{pdftitle={自然语言处理作业一实验报告：文本分类实现},pdfauthor={吴嘉豪}}
+\hypersetup{pdftitle={自然语言处理作业一实验报告},pdfauthor={吴嘉豪}}
 %------------------------枚举符号-------------------
 \usepackage{enumitem,amssymb}
 \usepackage{needspace}
@@ -87,13 +87,11 @@ frame=trbl
     \textsc{\huge \kaishu{\textbf{计\ \ 算\ \ 机\ \ 学\ \ 院}}}\\[0.5cm]
     \textsc{\Large \textbf{自然语言处理课程作业一}}\\[0.8cm]
     \HRule \\[0.9cm]
-    { \LARGE \bfseries 文本分类实现：词袋、词向量与 BERT 的对比实验}\\[0.4cm]
+    { \LARGE \bfseries 文本分类实现}\\[0.4cm]
     \HRule \\[2.0cm]
     \centering
     \textsc{\LARGE \kaishu{姓名\ :\ 吴嘉豪}}\\[0.5cm]
     \textsc{\LARGE \kaishu{学号\ :\ 2113454}}\\[0.5cm]
-    \textsc{\LARGE \kaishu{年级\ :\ 2021级}}\\[0.5cm]
-    \textsc{\LARGE \kaishu{专业\ :\ 计算机科学与技术}}\\[0.5cm]
     \vfill
     {\Large \today}
     \end{center}
@@ -131,8 +129,8 @@ frame=trbl
 
 \begin{enumerate}
   \item \textbf{词袋模型（Task 1，30 分）}：Binary Bag-of-Words 与 Word Frequency 两种稀疏表示 + Logistic Regression；
-  \item \textbf{词向量（Task 2，50 分）}：预训练 GloVe\cite{pennington2014glove}、AG News 自训练 Word2Vec\cite{mikolov2013word2vec} 与 NYT 自训练 Word2Vec，文档向量取词向量平均 + Logistic Regression；
-  \item \textbf{预训练语言模型（Task 3，20 分）}：微调 bert-base-uncased\cite{devlin2019bert}，max\_length=64，3 epochs。
+  \item \textbf{词向量（Task 2，50 分）}：预训练 GloVe、AG News 自训练 Word2Vec 与 NYT 自训练 Word2Vec，文档向量取词向量平均 + Logistic Regression；
+  \item \textbf{预训练语言模型（Task 3，20 分）}：微调 bert-base-uncased，max\_length=64，3 epochs。
 \end{enumerate}
 
 评价指标为 Accuracy 与 Macro-F1。由于类别不均衡，少数类（business / politics）的识别能力在 Accuracy 中容易被掩盖，Macro-F1 通过对各类别 F1 取平均提供更公平的度量。
@@ -239,7 +237,7 @@ W2V-NYT 的训练语料只有 AG News 的约 1/10，分类性能却略高一些�
 
 \section{Task 3：BERT 微调}
 
-以 AutoModelForSequenceClassification 加载 google-bert/bert-base-uncased（12 层、768 维、约 1.1 亿参数）并接三分类头。Tokenization 设 max\_length=64 并截断，训练时以 DataCollatorWithPadding 按 batch 动态补齐。训练共 3 个 epoch，batch size 16，采用 AdamW 优化器与线性 warmup 调度，并以 fp16 混合精度训练。学习率按 BERT 论文\cite{devlin2019bert}推荐值在验证集上从 \{2e-5, 3e-5\} 中选择，结果见表~\ref{tab:bert}。
+以 AutoModelForSequenceClassification 加载 google-bert/bert-base-uncased（12 层、768 维、约 1.1 亿参数）并接三分类头。Tokenization 设 max\_length=64 并截断，训练时以 DataCollatorWithPadding 按 batch 动态补齐。训练共 3 个 epoch，batch size 16，采用 AdamW 优化器与线性 warmup 调度，并以 fp16 混合精度训练。学习率按 BERT 论文推荐值在验证集上从 \{2e-5, 3e-5\} 中选择，结果见表~\ref{tab:bert}。
 
 \begin{table}[!htbp]
   \centering
@@ -326,10 +324,8 @@ python src/aggregate_results.py  # 汇总 results/results.csv
 
 GloVe 下载自 \href{http://nlp.stanford.edu/data/glove.6B.zip}{nlp.stanford.edu/data/glove.6B.zip}（解压出 glove.6B.100d.txt 放入 data/ 目录）；BERT 权重本地缓存于 models/bert-base-uncased/（SHA256 已与官方发布核对一致）；NLTK 分词数据需一次性 nltk.download("punkt") 与 nltk.download("punkt\_tab")。
 
-代码结构：本仓库按作业组织，每次作业独立放在 hw1/、hw2/ 等文件夹中。hw1/src/common.py 提供共享工具（数据加载、分词、平均池化、评估与结果落盘），保证各任务使用完全相同的数据划分与评价流程；data\_prep.py 生成并落盘 80/10/10 划分；各 task 脚本分别实现对应任务；aggregate\_results.py 汇总所有实验指标（hw1/results/results.csv）。hw1/data/raw/ 存放原始数据，hw1/report/ 存放本报告。
+
 
 %----------------------------------------------------------------
 \newpage
-\bibliographystyle{plain}
-\bibliography{references}
 \end{document}
