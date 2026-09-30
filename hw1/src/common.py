@@ -5,6 +5,8 @@ exactly the same data split and the same evaluation procedure.
 """
 import os
 import re
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from nltk import word_tokenize
@@ -15,10 +17,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
 RANDOM_SEED = 42
-DATA_DIR = os.path.join(ROOT, "data")
-RESULTS_DIR = os.path.join(ROOT, "results")
-RAW_NYT = os.path.join(ROOT, "data", "raw", "nyt.csv")
-RAW_AG = os.path.join(ROOT, "data", "raw", "ag.csv")
+DATA_DIR = Path(os.path.join(ROOT, "data"))
+RESULTS_DIR = Path(os.path.join(ROOT, "results"))
+RAW_NYT = Path(os.path.join(ROOT, "data", "raw", "nyt.csv"))
+RAW_AG = Path(os.path.join(ROOT, "data", "raw", "ag.csv"))
 
 LABELS = ["business", "politics", "sports"]  # fixed order for consistent encoding
 
