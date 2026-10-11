@@ -1,0 +1,96 @@
+\documentclass[11pt]{article}
+
+% Course Project Proposal (Phase 1) -- Track B: Demonstration
+% Compiled with pdfLaTeX; final (non-anonymous) ACL style.
+\usepackage{acl}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\hypersetup{
+  pdftitle={From Bag-of-Words to Large Language Models: A Unified Comparative System for Text Classification},
+  pdfauthor={Jiahao Wu}
+}
+
+\title{From Bag-of-Words to Large Language Models:\\ A Unified Comparative System for Text Classification}
+
+\author{Jiahao Wu \\
+  Student ID: 2113454 \\
+  College of Computer Science, Nankai University \\}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This proposal presents \textbf{ClassiScope}, a unified comparative system for text classification that integrates four model families---sparse lexical features, static word embeddings, fine-tuned pretrained transformers, and prompting of instruction-tuned large language models (LLMs)---under a single data protocol, evaluation suite, and web interface. The project is motivated by an observation from our course exercises: on news topic classification, a simple word-frequency baseline slightly outperformed a fine-tuned BERT under identical splits, raising the question of \emph{when} model sophistication actually pays off. We plan to answer this question with controlled experiments on two public benchmarks, an interpretability module that compares token-level explanations across model families, and robustness and efficiency analyses. The deliverables are an open-source system with a live demonstration, a controlled comparison study, and an ACL-format final report.
+\end{abstract}
+
+\section{Team Members and Responsibilities}
+
+This project is completed individually. Jiahao Wu (Student ID: 2113454) is solely responsible for all components: problem formulation and related-work survey, system design and implementation, data preparation, all experiments and analysis, the final report and presentation, and the runnable demonstration.
+
+\section{Background and Motivation}
+
+Text classification is the canonical task of NLP, and its solutions have evolved through four technical generations: (i)~sparse lexical features with linear classifiers, such as bag-of-words or TF--IDF with logistic regression; (ii)~distributed word embeddings \citep{mikolov2013efficient,pennington2014glove} compressed into document vectors and fed to lightweight classifiers; (iii)~fine-tuned pretrained transformers \citep{vaswani2017attention,devlin-etal-2019-bert}; and (iv)~instruction-tuned LLMs applied through zero-/few-shot prompting, without any task-specific training \citep{brown2020language,ouyang2022training,qwen2025}.
+
+These families embody different trade-offs among labeled-data requirements, compute cost, interpretability, and deployment effort, yet published comparisons are often fragmentary: datasets, splits, tuning budgets, and metrics differ from study to study. Our own course exercise made the issue concrete. On the NYT news topic classification task, with identical 80/10/10 stratified splits for every model, a plain word-frequency baseline reached slightly \emph{higher} accuracy (99.1\%) than a fine-tuned BERT (98.4\%). Sophistication, in other words, must be earned rather than assumed. This observation motivates the central question of the project---\emph{under what conditions does each model family actually pay off?}---and the system contribution: a single, controlled, and demonstrable platform in which all families are trained, explained, stress-tested, and compared under exactly the same protocol.
+
+\section{Problem Definition}
+
+We will build \textbf{ClassiScope}, a unified text-classification system, and use it to answer four research questions:
+
+\begin{itemize}
+\item \textbf{RQ1 (Accuracy).} How do the four model families compare on the same datasets, with identical splits, preprocessing, and metrics?
+\item \textbf{RQ2 (Robustness).} How do their predictions degrade under character-level perturbations (typos, spacing, casing) and cross-task transfer?
+\item \textbf{RQ3 (Interpretability).} What token-level evidence does each family rely on, and to what extent do explanations agree across families?
+\item \textbf{RQ4 (Efficiency).} What accuracy--cost trade-offs (trainable parameters, training time, inference latency) arise for practical deployment?
+\end{itemize}
+
+\section{Proposed System and Implementation Plan}
+
+\textbf{System functions.} Given an input text, \textbf{ClassiScope} produces side-by-side predictions from all four model routes with confidence scores, token-level explanation highlights, and model metadata; given a configured dataset, it trains or loads all routes, runs the robustness and efficiency suites, and renders a comparison dashboard. A web interface (Gradio) exposes the full pipeline as a live demonstration.
+
+\textbf{Architecture.} The system has three layers. (1)~A \emph{data layer} with unified loaders and preprocessing; datasets are shuffled and split once (80/10/10, stratified, fixed seed) and all models consume the same cached splits. (2)~A \emph{model layer} in which four routes implement a common \texttt{predict\_with\_explanation} interface: TF--IDF + logistic regression; Word2Vec/GloVe mean-pooled document vectors + logistic regression; fine-tuned BERT-base; and an instruction-tuned LLM (Qwen2.5, accessed via API, with a small local variant as fallback) under zero-/few-shot prompting. (3)~An \emph{analysis layer} providing interpretability (logistic-regression coefficients; gradient-based saliency for BERT; LLM rationales), the robustness suite, an efficiency profiler, and the web demo.
+
+\textbf{Implementation plan.} Existing course-exercise code for the first three routes will be ported into the framework and refactored behind the common interface; the LLM route, explanation module, and web demo are built new. All experiments are scripted, seeded, and reproducible; the source code will ship with an English README covering the environment, dependencies, data acquisition, and run steps.
+
+\section{Evaluation Plan}
+
+We evaluate on two public benchmarks spanning two classification tasks: the NYT news topic dataset used in course exercises \citep{sandhaus2008nyt} and the SST-2 sentiment dataset \citep{socher-2013-recursive}. All routes report \textbf{Accuracy} and \textbf{Macro-F1} on the same held-out test set, with paired bootstrap tests for significance. Robustness is measured as accuracy deltas under the perturbation suite and as cross-task transfer gaps. Efficiency is reported as trainable parameters, wall-clock training time, and per-sample inference latency. Interpretability is assessed qualitatively and quantitatively, by the overlap of top-attributed tokens across families. The four routes serve as baselines for one another; the study itself is the comparison, so no external system is required for a valid result.
+
+\section{Expected Outcomes}
+
+The project will deliver: (1)~an open-source, reproducible system with a runnable demo (live demo or video, per course requirements); (2)~a controlled comparison study answering RQ1--RQ4; (3)~an eight-page ACL-format final report; and (4)~final slides and a contribution statement. We hypothesize that (H1) the fine-tuned transformer is strongest in-domain when labeled data is plentiful, with sparse and embedding-based baselines close behind on easy topic tasks, as our course results suggest; (H2) LLM prompting is competitive without any task-specific training, especially in low-data regimes, but at higher latency and cost; and (H3) the families make complementary errors, which their respective explanations expose. The system is designed so that whichever hypotheses the data overturns, the resulting analysis remains a substantive contribution.
+
+\section{Project Timeline}
+
+{\small
+\begin{tabular}{@{}p{2.4cm}p{4.85cm}@{}}
+\toprule
+\textbf{Phase / Period} & \textbf{Tasks} \\
+\midrule
+Phase 1: Proposal & This document (due Oct.\ 12, 2026). \\
+\midrule
+Weeks 1--2 (Oct.\ 13--26) & Unified data pipeline; port sparse, embedding, and BERT routes onto both datasets; demo skeleton. \\
+\midrule
+Phase 2: Midterm (date TBD) & All four routes running with preliminary results; midterm report and progress slides. \\
+\midrule
+Weeks 3--5 (Oct.\ 27--Nov.\ 16) & LLM prompting route; interpretability, robustness, and efficiency studies; full analysis. \\
+\midrule
+Weeks 6--7 (Nov.\ 17--30) & Final report writing; demo polish and demo video; final slides and contribution statement. \\
+\midrule
+Phase 3: Final (dates TBD) & Final report, slides, source code, demo, and contribution statement submitted; in-class presentation. \\
+\bottomrule
+\end{tabular}
+}
+
+\bibliography{custom}
+
+\end{document}

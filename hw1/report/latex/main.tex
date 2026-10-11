@@ -237,7 +237,7 @@ W2V-NYT 的训练语料只有 AG News 的约 1/10，分类性能却略高一些�
 
 \section{Task 3：BERT 微调}
 
-以 AutoModelForSequenceClassification 加载 google-bert/bert-base-uncased（12 层、768 维、约 1.1 亿参数）并接三分类头。Tokenization 设 max\_length=64 并截断，训练时以 DataCollatorWithPadding 按 batch 动态补齐。训练共 3 个 epoch，batch size 16，采用 AdamW 优化器与线性 warmup 调度，并以 fp16 混合精度训练。学习率按 BERT 论文推荐值在验证集上从 \{2e-5, 3e-5\} 中选择，结果见表~\ref{tab:bert}。
+以 AutoModelForSequenceClassification 加载 google-bert/bert-base-uncased（12 层、768 维、约 1.1 亿参数）并接三分类头。Tokenization 设 max\_length=64 并截断，训练时以 DataCollatorWithPadding 按 batch 动态补齐。训练共 3 个 epoch，batch size 16，采用 AdamW 优化器与线性衰减学习率调度，并以 fp16 混合精度训练。学习率按 BERT 论文推荐值在验证集上从 \{2e-5, 3e-5\} 中选择，结果见表~\ref{tab:bert}。
 
 \begin{table}[!htbp]
   \centering
