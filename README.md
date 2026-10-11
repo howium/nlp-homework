@@ -1,6 +1,6 @@
 # NLP Coursework
 
-自然语言处理课程作业仓库。每周作业放在独立文件夹（`hw1/`、`hw2/`、…）中，课程大作业（Course Project）放在 `project/` 中。
+自然语言处理课程作业仓库。每周作业放在独立文件夹（`hw1/`、`hw2/`、…）中；课程大作业（Course Project）在独立仓库 [NLP2026_Team14_Demo](https://github.com/howium/NLP2026_Team14_Demo) 中。
 
 ## 环境
 
@@ -18,4 +18,4 @@ pip install -r requirements.txt
 | 作业 | 内容 | 报告 |
 |---|---|---|
 | hw1 | NYT 新闻三分类：Binary BoW / Word Frequency / GloVe / Word2Vec / BERT 微调 | [hw1/report/hw1_report.pdf](hw1/report/hw1_report.pdf) |
-| project | 课程大作业（Team 14 · Track B）：From Bag-of-Words to LLMs — 文本分类统一对比系统 | [project/proposal/Team14_Proposal.pdf](project/proposal/Team14_Proposal.pdf) |
+| project | 课程大作业（Team 14 · Track B）：From Bag-of-Words to LLMs — 文本分类统一对比系统 | [howium/NLP2026_Team14_Demo](https://github.com/howium/NLP2026_Team14_Demo) |
